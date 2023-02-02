@@ -1,5 +1,5 @@
 name: dt_money
-description: A Very Good Project created by Very Good CLI.
+description: A refactored version of a previous app that I made, using the BLoC library.
 version: 1.0.0+1
 publish_to: none
 
@@ -18,6 +18,8 @@ dependencies:
 
 dev_dependencies:
   bloc_test: ^9.1.0
+  build_runner: ^2.3.3
+  flutter_gen_runner: ^5.1.0+1 # flutter packages pub run build_runner build
   flutter_test:
     sdk: flutter
   mocktail: ^0.3.0
@@ -26,3 +28,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    - assets/images/
