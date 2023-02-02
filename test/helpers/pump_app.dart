@@ -11,13 +11,17 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 extension PumpApp on WidgetTester {
-  Future<void> pumpApp(Widget widget) {
+  Future<void> pumpApp(
+    Widget widget, {
+    Brightness themeMode = Brightness.light,
+  }) {
     return pumpWidget(
       MaterialApp(
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
         ],
+        theme: ThemeData(brightness: themeMode),
         supportedLocales: AppLocalizations.supportedLocales,
         home: widget,
       ),
