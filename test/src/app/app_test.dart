@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('App', () {
-    testWidgets('renders CounterPage', (tester) async {
+    testWidgets('renders DashboardPage', (tester) async {
       await tester.pumpWidget(const DtMoneyApp());
       expect(find.byType(DashboardPage), findsOneWidget);
     });
