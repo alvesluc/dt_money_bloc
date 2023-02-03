@@ -8,6 +8,7 @@ void main() {
     testWidgets('renders DashboardHeader', (tester) async {
       await tester.pumpWidget(const MaterialApp(home: DashboardPage()));
       await tester.pumpAndSettle();
+
       expect(find.byType(DashboardHeader), findsOneWidget);
     });
   });
