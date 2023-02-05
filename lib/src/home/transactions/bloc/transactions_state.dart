@@ -1,4 +1,4 @@
-part of 'transaction_bloc.dart';
+part of 'transactions_bloc.dart';
 
 enum TransactionsStatus { initial, loading, success, failure }
 

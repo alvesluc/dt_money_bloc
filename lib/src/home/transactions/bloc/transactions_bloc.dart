@@ -7,8 +7,8 @@ import 'package:equatable/equatable.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:uuid/uuid.dart';
 
-part 'transaction_event.dart';
-part 'transaction_state.dart';
+part 'transactions_event.dart';
+part 'transactions_state.dart';
 
 EventTransformer<E> _restartableDebounce<E>() {
   return (events, mapper) {
@@ -19,11 +19,11 @@ EventTransformer<E> _restartableDebounce<E>() {
   };
 }
 
-class TransactionBloc extends Bloc<TransactionEvent, TransactionsState> {
-  TransactionBloc(this._localStorage) : super(const TransactionsState()) {
+class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
+  TransactionsBloc(this._localStorage) : super(const TransactionsState()) {
     on(_fetchTransactions);
     on(_onAddTransaction);
-    on<TransactionSearched>(
+    on<TransactionsSearched>(
       _onSearchTermChanged,
       transformer: _restartableDebounce(),
     );
@@ -79,7 +79,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionsState> {
   }
 
   Future<void> _onSearchTermChanged(
-    TransactionSearched event,
+    TransactionsSearched event,
     Emitter<TransactionsState> emit,
   ) async {
     try {} catch (e) {
