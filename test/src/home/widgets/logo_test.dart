@@ -1,5 +1,5 @@
 import 'package:dt_money/gen/assets.gen.dart';
-import 'package:dt_money/src/dashboard/widgets/logo.dart';
+import 'package:dt_money/src/home/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
