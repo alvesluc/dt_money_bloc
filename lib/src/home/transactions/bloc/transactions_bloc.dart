@@ -36,7 +36,6 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
     Emitter<TransactionsState> emit,
   ) async {
     try {
-      emit(state.copyWith(status: TransactionsStatus.loading));
       final transactions = await _localStorage.getTransactions();
       emit(
         state.copyWith(
