@@ -62,6 +62,23 @@ void main() {
           verify(() => localStorage.getTransactions()).called(1);
         },
       );
+
+      blocTest<TransactionsBloc, TransactionsState>(
+        'emits failure status when TransactionsFetched and throw exception',
+        setUp: () {
+          when(() => localStorage.getTransactions()).thenAnswer((_) async {
+            throw Exception();
+          });
+        },
+        build: () => TransactionsBloc(localStorage),
+        act: (bloc) => bloc.add(TransactionsFetched()),
+        expect: () => <TransactionsState>[
+          const TransactionsState(status: TransactionsStatus.failure)
+        ],
+        verify: (_) {
+          verify(() => localStorage.getTransactions()).called(1);
+        },
+      );
     });
   });
 }

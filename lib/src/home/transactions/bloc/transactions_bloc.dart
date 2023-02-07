@@ -70,9 +70,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
           status: TransactionsStatus.success,
         ),
       );
-    } catch (e, st) {
-      print(e);
-      print(st);
+    } catch (e) {
       emit(state.copyWith(status: TransactionsStatus.failure));
     }
   }
