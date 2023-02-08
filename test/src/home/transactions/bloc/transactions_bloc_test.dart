@@ -18,19 +18,9 @@ void main() {
   late MockLocalStorageService localStorage;
 
   group('TransactionsBloc', () {
-    const mockNewTransaction = NewTransaction(
-      description: 'description',
-      value: 1,
-      category: 'category',
-      type: TransactionType.income,
-    );
-
-    const mockExtraNewTransaction = NewTransaction(
-      description: 'extraDescription',
-      value: 2,
-      category: 'extraCategory',
-      type: TransactionType.expense,
-    );
+    setUp(() {
+      localStorage = MockLocalStorageService();
+    });
 
     final mockTransactions = [
       Transaction(
@@ -53,14 +43,6 @@ void main() {
         type: TransactionType.expense,
       ),
     ];
-
-    setUpAll(() {
-      registerFallbackValue(mockTransactions.first);
-    });
-
-    setUp(() {
-      localStorage = MockLocalStorageService();
-    });
 
     test('initial state is TransactionsState', () {
       expect(TransactionsBloc(localStorage).state, const TransactionsState());
@@ -129,6 +111,24 @@ void main() {
     });
 
     group('TransactionAdded', () {
+      const mockNewTransaction = NewTransaction(
+        description: 'description',
+        value: 1,
+        category: 'category',
+        type: TransactionType.income,
+      );
+
+      const mockExtraNewTransaction = NewTransaction(
+        description: 'extraDescription',
+        value: 2,
+        category: 'extraCategory',
+        type: TransactionType.expense,
+      );
+
+      setUpAll(() {
+        registerFallbackValue(mockTransactions.first);
+      });
+
       blocTest<TransactionsBloc, TransactionsState>(
         'emits success when TransactionAdded adds a new transaction',
         setUp: () {
@@ -172,6 +172,25 @@ void main() {
             status: TransactionsStatus.success,
             transactions: [...mockTransactions, ...extraTransactions],
           ),
+        ],
+        verify: (_) {
+          verify(
+            () => localStorage.addTransaction(any<Transaction>()),
+          ).called(1);
+        },
+      );
+
+      blocTest<TransactionsBloc, TransactionsState>(
+        'emits failure when TransactionAdded throws an exception',
+        setUp: () {
+          when(
+            () => localStorage.addTransaction(any<Transaction>()),
+          ).thenAnswer((_) => throw Exception());
+        },
+        build: () => TransactionsBloc(localStorage),
+        act: (bloc) => bloc.add(const TransactionAdded(mockNewTransaction)),
+        expect: () => <TransactionsState>[
+          const TransactionsState(status: TransactionsStatus.failure),
         ],
         verify: (_) {
           verify(
