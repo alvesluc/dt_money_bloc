@@ -4,8 +4,8 @@ import 'package:dt_money/shared/services/local_storage_service.dart';
 import 'package:dt_money/src/home/transactions/models/new_transaction.dart';
 import 'package:dt_money/src/home/transactions/models/transaction.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:stream_transform/stream_transform.dart';
-import 'package:uuid/uuid.dart';
 
 part 'transactions_event.dart';
 part 'transactions_state.dart';
@@ -54,8 +54,8 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
   ) async {
     try {
       final transaction = Transaction(
-        id: const Uuid().v1(),
-        createdAt: DateTime.now(),
+        id: incrementTransactionId(state.transactions?.last.id),
+        createdAt: setDateWithoutTime(),
         description: event.newTransaction.description,
         value: event.newTransaction.value,
         category: event.newTransaction.category,
@@ -73,6 +73,18 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
     } catch (e) {
       emit(state.copyWith(status: TransactionsStatus.failure));
     }
+  }
+
+  @visibleForTesting
+  int incrementTransactionId(int? id) {
+    if (id == null) return 1;
+    return id + 1;
+  }
+
+  @visibleForTesting
+  DateTime setDateWithoutTime() {
+    final now = DateTime.now();
+    return DateTime(now.year, now.month, now.day);
   }
 
   Future<void> _onSearchTermChanged(

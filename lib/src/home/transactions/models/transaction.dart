@@ -15,7 +15,7 @@ class Transaction extends Equatable {
 
   factory Transaction.fromMap(Map<String, dynamic> map) {
     return Transaction(
-      id: map['id'] as String,
+      id: map['id'] as int,
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
       description: map['description'] as String,
       value: map['value'] as double,
@@ -28,7 +28,7 @@ class Transaction extends Equatable {
     return Transaction.fromMap(json.decode(source) as Map<String, dynamic>);
   }
 
-  final String id;
+  final int id;
   final DateTime createdAt;
   final String description;
   final double value;
