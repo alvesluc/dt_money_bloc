@@ -27,7 +27,7 @@ void main() {
         id: 1,
         createdAt: _setDateWithoutTime(),
         description: 'description',
-        value: 1,
+        value: 10,
         category: 'category',
         type: TransactionType.income,
       ),
@@ -38,7 +38,7 @@ void main() {
         id: 2,
         createdAt: _setDateWithoutTime(),
         description: 'extraDescription',
-        value: 2,
+        value: 20,
         category: 'extraCategory',
         type: TransactionType.expense,
       ),
@@ -113,14 +113,14 @@ void main() {
     group('TransactionAdded', () {
       const mockNewTransaction = NewTransaction(
         description: 'description',
-        value: 1,
+        value: 10,
         category: 'category',
         type: TransactionType.income,
       );
 
       const mockExtraNewTransaction = NewTransaction(
         description: 'extraDescription',
-        value: 2,
+        value: 20,
         category: 'extraCategory',
         type: TransactionType.expense,
       );
@@ -197,6 +197,88 @@ void main() {
             () => localStorage.addTransaction(any<Transaction>()),
           ).called(1);
         },
+      );
+    });
+
+    group('TransactionSearched', () {
+      final extraTransactionsForSearching = [
+        Transaction(
+          id: 3,
+          createdAt: _setDateWithoutTime(),
+          description: 'forSearching',
+          value: 30,
+          category: 'forSearching',
+          type: TransactionType.income,
+        ),
+      ];
+
+      blocTest<TransactionsBloc, TransactionsState>(
+        'emits success when TransactionsSearched finds matching',
+        build: () => TransactionsBloc(localStorage),
+        seed: () => TransactionsState(
+          status: TransactionsStatus.success,
+          transactions: [...mockTransactions, ...extraTransactions],
+        ),
+        act: (bloc) => bloc.add(const TransactionsSearched('income')),
+        expect: () => <TransactionsState>[
+          TransactionsState(
+            status: TransactionsStatus.success,
+            transactions: mockTransactions,
+          ),
+        ],
+      );
+
+      blocTest<TransactionsBloc, TransactionsState>(
+        'emits success when TransactionsSearched finds no matching',
+        build: () => TransactionsBloc(localStorage),
+        seed: () => TransactionsState(
+          status: TransactionsStatus.success,
+          transactions: [...mockTransactions, ...extraTransactions],
+        ),
+        act: (bloc) => bloc.add(
+          const TransactionsSearched('gibberish'),
+        ),
+        expect: () => <TransactionsState>[
+          const TransactionsState(
+            status: TransactionsStatus.success,
+            transactions: [],
+          ),
+        ],
+      );
+
+      blocTest<TransactionsBloc, TransactionsState>(
+        'emits success when TransactionsSearched finds multiple matching',
+        build: () => TransactionsBloc(localStorage),
+        seed: () => TransactionsState(
+          status: TransactionsStatus.success,
+          transactions: [
+            ...mockTransactions,
+            ...extraTransactions,
+            ...extraTransactionsForSearching,
+          ],
+        ),
+        act: (bloc) => bloc.add(
+          const TransactionsSearched('description'),
+        ),
+        expect: () => <TransactionsState>[
+          TransactionsState(
+            status: TransactionsStatus.success,
+            transactions: [...mockTransactions, ...extraTransactions],
+          ),
+        ],
+      );
+
+      blocTest<TransactionsBloc, TransactionsState>(
+        'emits nothing if search is equal to previous state',
+        build: () => TransactionsBloc(localStorage),
+        seed: () => TransactionsState(
+          status: TransactionsStatus.success,
+          transactions: [...mockTransactions, ...extraTransactions],
+        ),
+        act: (bloc) => bloc.add(
+          const TransactionsSearched('description'),
+        ),
+        expect: () => <Never>[],
       );
     });
   });

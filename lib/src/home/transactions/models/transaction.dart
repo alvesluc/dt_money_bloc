@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:dt_money/src/shared/enums.dart';
+import 'package:dt_money/src/shared/extensions.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 
 class Transaction extends Equatable {
   const Transaction({
@@ -38,7 +40,6 @@ class Transaction extends Equatable {
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{}
       ..addAll({'id': id})
-      ..addAll({'id': id})
       ..addAll({'createdAt': createdAt.millisecondsSinceEpoch})
       ..addAll({'description': description})
       ..addAll({'value': value})
@@ -49,6 +50,12 @@ class Transaction extends Equatable {
   }
 
   String toJson() => json.encode(toMap());
+
+  String get queryable {
+    // ignore: lines_longer_than_80_chars
+    return 'Transaction($id ${DateFormat('dd/MM/y').format(createdAt)}) $description ${value.toCurrency()} $category ${type.name})'
+        .toLowerCase();
+  }
 
   @override
   String toString() {

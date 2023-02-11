@@ -7,8 +7,15 @@ void main() {
     test('supports value comparison', () {
       expect(TransactionsState(), TransactionsState());
       expect(
-        TransactionsState().toString(),
-        TransactionsState().toString(),
+        TransactionsState(),
+        TransactionsState(),
+      );
+    });
+
+    test('copyWith returns copy', () {
+      expect(
+        TransactionsState().copyWith(),
+        TransactionsState(),
       );
     });
   });
