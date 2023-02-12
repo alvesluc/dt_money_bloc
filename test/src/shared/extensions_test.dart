@@ -27,5 +27,17 @@ void main() {
       const value = 1000.0;
       expect(value.toCurrency(), '1.000,00');
     });
+
+    group('lastOrNull', () {
+      test('returns last when list is not empty', () {
+        final list = <String>['first', 'last'];
+        expect(list.lastOrNull, 'last');
+      });
+
+      test('returns null when list is empty', () {
+        final list = <Object>[];
+        expect(list.lastOrNull, null);
+      });
+    });
   });
 }
