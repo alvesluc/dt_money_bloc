@@ -15,7 +15,6 @@ class SharedPreferencesImpl implements LocalStorageService {
     final sharedPreferences = await SharedPreferences.getInstance();
     final transactions = await _getStoredTransactions();
     transactions.add(transaction);
-    print(transactions);
     await sharedPreferences.setString('transactions', _toJson(transactions));
   }
 

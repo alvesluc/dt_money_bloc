@@ -1,7 +1,11 @@
 {
     "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
-    }
+    "newTransactionButtonLabel": "New transaction",
+    "dashboardIncomesCardLabel": "Income",
+    "dashboardExpensesCardLabel": "Expenses",
+    "dashboardTotalCardLabel": "Total",
+    "searchForATransactionLabel": "Search for a transaction...",
+    "transactionsWillBeShownHere": "Transactions will be shown here",
+    "seemsLikeItsEmptyTransactions": "Seems like it's empty now, you can start by adding your first transaction.",
+    "madeWithLoveByLabel": "Made with 💙 by alvesluc"
 }

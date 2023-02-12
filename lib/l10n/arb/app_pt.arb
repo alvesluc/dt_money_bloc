@@ -1,0 +1,11 @@
+{
+    "@@locale": "pt",
+    "newTransactionButtonLabel": "Nova transação",
+    "dashboardIncomesCardLabel": "Entradas",
+    "dashboardExpensesCardLabel": "Saídas",
+    "dashboardTotalCardLabel": "Total",
+    "searchForATransactionLabel": "Busque por uma transação...",
+    "transactionsWillBeShownHere": "As transações aparecerão aqui",
+    "seemsLikeItsEmptyTransactions": "Por enquanto está vazio, mas você pode começar adicionando sua primeira transação.",
+    "madeWithLoveByLabel": "Feito com 💙 por alvesluc"
+}
