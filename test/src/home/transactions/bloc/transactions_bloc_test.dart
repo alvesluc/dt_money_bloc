@@ -201,6 +201,8 @@ void main() {
     });
 
     group('TransactionSearched', () {
+      const debounceDuration = Duration(milliseconds: 500);
+
       final extraTransactionsForSearching = [
         Transaction(
           id: 3,
@@ -220,10 +222,12 @@ void main() {
           transactions: [...mockTransactions, ...extraTransactions],
         ),
         act: (bloc) => bloc.add(const TransactionsSearched('income')),
+        wait: debounceDuration,
         expect: () => <TransactionsState>[
           TransactionsState(
             status: TransactionsStatus.success,
-            transactions: mockTransactions,
+            transactions: [...mockTransactions, ...extraTransactions],
+            queriedTransactions: mockTransactions,
           ),
         ],
       );
@@ -238,10 +242,12 @@ void main() {
         act: (bloc) => bloc.add(
           const TransactionsSearched('gibberish'),
         ),
+        wait: debounceDuration,
         expect: () => <TransactionsState>[
-          const TransactionsState(
+          TransactionsState(
             status: TransactionsStatus.success,
-            transactions: [],
+            transactions: [...mockTransactions, ...extraTransactions],
+            queriedTransactions: const [],
           ),
         ],
       );
@@ -260,10 +266,16 @@ void main() {
         act: (bloc) => bloc.add(
           const TransactionsSearched('description'),
         ),
+        wait: debounceDuration,
         expect: () => <TransactionsState>[
           TransactionsState(
             status: TransactionsStatus.success,
-            transactions: [...mockTransactions, ...extraTransactions],
+            transactions: [
+              ...mockTransactions,
+              ...extraTransactions,
+              ...extraTransactionsForSearching,
+            ],
+            queriedTransactions: [...mockTransactions, ...extraTransactions],
           ),
         ],
       );

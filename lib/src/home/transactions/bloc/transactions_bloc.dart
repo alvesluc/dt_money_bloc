@@ -1,18 +1,33 @@
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:dt_money/shared/services/local_storage_service.dart';
 import 'package:dt_money/src/home/transactions/models/new_transaction.dart';
 import 'package:dt_money/src/home/transactions/models/transaction.dart';
+import 'package:dt_money/src/shared/extensions.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 part 'transactions_event.dart';
 part 'transactions_state.dart';
+
+EventTransformer<E> _restartableDebounce<E>() {
+  return (events, mapper) {
+    return restartable<E>()(
+      events.debounce(const Duration(milliseconds: 350)),
+      mapper,
+    );
+  };
+}
 
 class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
   TransactionsBloc(this._localStorage) : super(const TransactionsState()) {
     on(_fetchTransactions);
     on(_onAddTransaction);
-    on(_onSearchTermChanged);
+    on<TransactionsSearched>(
+      _onSearchTermChanged,
+      transformer: _restartableDebounce(),
+    );
   }
 
   final LocalStorageService _localStorage;
@@ -23,14 +38,14 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
   ) async {
     try {
       final transactions = await _localStorage.getTransactions();
-      emit(
+      return emit(
         state.copyWith(
           transactions: transactions,
           status: TransactionsStatus.success,
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: TransactionsStatus.failure));
+      return emit(state.copyWith(status: TransactionsStatus.failure));
     }
   }
 
@@ -40,7 +55,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
   ) async {
     try {
       final transaction = Transaction(
-        id: incrementTransactionId(state.transactions?.last.id),
+        id: incrementTransactionId(state.transactions?.lastOrNull?.id),
         createdAt: setDateWithoutTime(),
         description: event.newTransaction.description,
         value: event.newTransaction.value,
@@ -50,14 +65,14 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
 
       await _localStorage.addTransaction(transaction);
 
-      emit(
+      return emit(
         state.copyWith(
           transactions: [...?state.transactions, transaction],
           status: TransactionsStatus.success,
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: TransactionsStatus.failure));
+      return emit(state.copyWith(status: TransactionsStatus.failure));
     }
   }
 
@@ -65,21 +80,34 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
     TransactionsSearched event,
     Emitter<TransactionsState> emit,
   ) {
-    if (state.transactions == null) return;
+    try {
+      if (state.transactions == null) return;
 
-    final queriedTransactions = <Transaction>[];
-    for (final transaction in state.transactions!) {
-      if (transaction.queryable.contains(event.query.toLowerCase())) {
-        queriedTransactions.add(transaction);
+      if (event.query.isEmpty) {
+        return emit(
+          state.copyWith(
+            queriedTransactions: [],
+            status: TransactionsStatus.success,
+          ),
+        );
       }
-    }
 
-    emit(
-      state.copyWith(
-        transactions: queriedTransactions,
-        status: TransactionsStatus.success,
-      ),
-    );
+      final queriedTransactions = <Transaction>[];
+      for (final transaction in state.transactions!) {
+        if (transaction.queryable.contains(event.query.toLowerCase())) {
+          queriedTransactions.add(transaction);
+        }
+      }
+
+      return emit(
+        state.copyWith(
+          queriedTransactions: queriedTransactions,
+          status: TransactionsStatus.success,
+        ),
+      );
+    } catch (e) {
+      return emit(state.copyWith(status: TransactionsStatus.failure));
+    }
   }
 
   @visibleForTesting
