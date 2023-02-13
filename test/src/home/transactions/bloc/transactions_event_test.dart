@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:dt_money/src/home/transactions/bloc/transactions_bloc.dart';
-import 'package:dt_money/src/home/transactions/models/new_transaction.dart';
 import 'package:dt_money/src/shared/enums.dart';
+import 'package:dt_money/src/shared/models/new_transaction.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

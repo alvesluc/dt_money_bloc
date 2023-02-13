@@ -46,7 +46,6 @@ class ColumnBuilder extends StatelessWidget {
           itemCount,
           (index) {
             if (separatorBuilder != null && index < itemCount - 1) {
-              print('IN SEPARATOR: $index');
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -55,7 +54,6 @@ class ColumnBuilder extends StatelessWidget {
                 ],
               );
             } else {
-              print('OUTSIDE SEPARATOR: $index');
               return itemBuilder(context, index);
             }
           },

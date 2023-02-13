@@ -1,13 +1,13 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:dt_money/shared/services/local_storage_service.dart';
 import 'package:dt_money/src/home/transactions/bloc/transactions_bloc.dart';
-import 'package:dt_money/src/home/transactions/models/new_transaction.dart';
-import 'package:dt_money/src/home/transactions/models/transaction.dart';
 import 'package:dt_money/src/shared/enums.dart';
+import 'package:dt_money/src/shared/models/new_transaction.dart';
+import 'package:dt_money/src/shared/models/transaction.dart';
+import 'package:dt_money/src/shared/repositories/transactions_repository/transactions_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockLocalStorageService extends Mock implements LocalStorageService {}
+class MockLocalStorageService extends Mock implements TransactionsRepository {}
 
 void main() {
   DateTime _setDateWithoutTime() {

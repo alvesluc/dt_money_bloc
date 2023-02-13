@@ -14,7 +14,7 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return FilledButton(
       onPressed: enabled ? onPressed : null,
       child: Text(label),
     );
