@@ -25,7 +25,7 @@ class _TabletOrBiggerHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      height: 200,
+      height: 120,
       alignment: Alignment.center,
       child: Container(
         constraints: const BoxConstraints(maxWidth: 1120),
@@ -47,7 +47,7 @@ class _MobileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       alignment: Alignment.center,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

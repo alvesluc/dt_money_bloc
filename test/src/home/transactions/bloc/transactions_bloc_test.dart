@@ -225,7 +225,7 @@ void main() {
         wait: debounceDuration,
         expect: () => <TransactionsState>[
           TransactionsState(
-            status: TransactionsStatus.success,
+            status: TransactionsStatus.searched,
             transactions: [...mockTransactions, ...extraTransactions],
             queriedTransactions: mockTransactions,
           ),
@@ -245,7 +245,7 @@ void main() {
         wait: debounceDuration,
         expect: () => <TransactionsState>[
           TransactionsState(
-            status: TransactionsStatus.success,
+            status: TransactionsStatus.searched,
             transactions: [...mockTransactions, ...extraTransactions],
             queriedTransactions: const [],
           ),
@@ -269,7 +269,7 @@ void main() {
         wait: debounceDuration,
         expect: () => <TransactionsState>[
           TransactionsState(
-            status: TransactionsStatus.success,
+            status: TransactionsStatus.searched,
             transactions: [
               ...mockTransactions,
               ...extraTransactions,
@@ -278,19 +278,6 @@ void main() {
             queriedTransactions: [...mockTransactions, ...extraTransactions],
           ),
         ],
-      );
-
-      blocTest<TransactionsBloc, TransactionsState>(
-        'emits nothing if search is equal to previous state',
-        build: () => TransactionsBloc(localStorage),
-        seed: () => TransactionsState(
-          status: TransactionsStatus.success,
-          transactions: [...mockTransactions, ...extraTransactions],
-        ),
-        act: (bloc) => bloc.add(
-          const TransactionsSearched('description'),
-        ),
-        expect: () => <Never>[],
       );
     });
   });

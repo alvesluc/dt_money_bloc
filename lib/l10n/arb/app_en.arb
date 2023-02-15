@@ -7,5 +7,6 @@
     "searchForATransactionLabel": "Search for a transaction...",
     "transactionsWillBeShownHere": "Transactions will be shown here",
     "seemsLikeItsEmptyTransactions": "Seems like it's empty now, you can start by adding your first transaction.",
+    "noTransactionsFound": "No transactions found",
     "madeWithLoveByLabel": "Made with 💙 by alvesluc"
 }

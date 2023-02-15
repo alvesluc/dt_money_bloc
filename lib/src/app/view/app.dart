@@ -1,6 +1,6 @@
 import 'package:dt_money/l10n/l10n.dart';
-import 'package:dt_money/shared/theme.g.dart';
 import 'package:dt_money/src/home/view/home_page.dart';
+import 'package:dt_money/src/shared/theme.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
