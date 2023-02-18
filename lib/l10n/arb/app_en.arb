@@ -8,5 +8,13 @@
     "transactionsWillBeShownHere": "Transactions will be shown here",
     "seemsLikeItsEmptyTransactions": "Seems like it's empty now, you can start by adding your first transaction.",
     "noTransactionsFound": "No transactions found",
+    "newTransactionTitle": "New transaction",
+    "descriptionLabel": "Description",
+    "priceLabel": "Price",
+    "categoryLabel": "Category",
+    "income": "Income",
+    "expense": "Expense",
+    "chooseATransactionTypeError": "Choose the transaction type",
+    "registerTransactionLabel": "Register transaction",
     "madeWithLoveByLabel": "Made with 💙 by alvesluc"
 }

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dt_money/src/shared/enums.dart';
 import 'package:dt_money/src/shared/extensions.dart';
 import 'package:dt_money/src/shared/models/new_transaction.dart';
 import 'package:dt_money/src/shared/models/transaction.dart';
@@ -41,6 +42,8 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
     Emitter<TransactionsState> emit,
   ) async {
     try {
+      if (event.newTransaction.type == TransactionType.undefined) return;
+
       final transaction = Transaction(
         id: incrementTransactionId(state.transactions?.lastOrNull?.id),
         createdAt: setDateWithoutTime(),

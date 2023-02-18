@@ -8,5 +8,13 @@
     "transactionsWillBeShownHere": "As transações aparecerão aqui",
     "seemsLikeItsEmptyTransactions": "Por enquanto está vazio, mas você pode começar adicionando sua primeira transação.",
     "noTransactionsFound": "Nenhuma transação encontrada",
+    "newTransactionTitle": "Nova transação",
+    "descriptionLabel": "Descrição",
+    "priceLabel": "Preço",
+    "categoryLabel": "Categoria",
+    "income": "Entrada",
+    "expense": "Saída",
+    "chooseATransactionTypeError": "Escolha o tipo da transação",
+    "registerTransactionLabel": "Cadastrar transação",
     "madeWithLoveByLabel": "Feito com 💙 por alvesluc"
 }

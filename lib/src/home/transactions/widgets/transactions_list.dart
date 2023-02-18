@@ -40,10 +40,10 @@ class TransactionsList extends StatelessWidget {
               return const NoTransactionsFound();
             }
             return ColumnBuilder.separated(
-              itemCount: state.transactions!.length,
+              itemCount: state.queriedTransactions!.length,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               itemBuilder: (context, i) {
-                final transactions = state.transactions!;
+                final transactions = state.queriedTransactions!;
                 return TransactionTile(
                   transaction: transactions[i],
                 );

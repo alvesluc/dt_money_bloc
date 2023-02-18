@@ -1,5 +1,6 @@
 import 'package:dt_money/l10n/l10n.dart';
 import 'package:dt_money/src/home/transactions/bloc/transactions_bloc.dart';
+import 'package:dt_money/src/shared/widgets/default_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,14 +34,8 @@ class _SearchTransactionsState extends State<SearchTransactions> {
       child: Row(
         children: [
           Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: l10n.searchForATransactionLabel,
-                isDense: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6),
-                ),
-              ),
+            child: DefaultTextField(
+              label: l10n.searchForATransactionLabel,
               onChanged: setQuery,
             ),
           ),
