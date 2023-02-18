@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
           Dashboard(),
           SearchTransactions(),
           TransactionsList(),
-          Divider(indent: 20, endIndent: 20),
+          SizedBox(height: 20),
           MadeWithLove(),
         ],
       ),
