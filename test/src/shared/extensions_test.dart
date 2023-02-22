@@ -8,6 +8,11 @@ void main() {
       expect(value.toCurrency(), '0,00');
     });
 
+    test('formats properly when value is lower than 1', () {
+      const value = 0.1;
+      expect(value.toCurrency(), '0,10');
+    });
+
     test('formats properly unit', () {
       const value = 1.0;
       expect(value.toCurrency(), '1,00');
