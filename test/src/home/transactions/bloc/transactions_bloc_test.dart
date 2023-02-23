@@ -7,7 +7,8 @@ import 'package:dt_money/src/shared/repositories/transactions_repository/transac
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockLocalStorageService extends Mock implements TransactionsRepository {}
+class TransactionsRepositoryMock extends Mock
+    implements TransactionsRepository {}
 
 void main() {
   DateTime _setDateWithoutTime() {
@@ -15,11 +16,11 @@ void main() {
     return DateTime(now.year, now.month, now.day);
   }
 
-  late MockLocalStorageService localStorage;
+  late TransactionsRepositoryMock transactionsRepository;
 
   group('TransactionsBloc', () {
     setUp(() {
-      localStorage = MockLocalStorageService();
+      transactionsRepository = TransactionsRepositoryMock();
     });
 
     final mockTransactions = [
@@ -45,17 +46,20 @@ void main() {
     ];
 
     test('initial state is TransactionsState', () {
-      expect(TransactionsBloc(localStorage).state, const TransactionsState());
+      expect(TransactionsBloc(transactionsRepository).state,
+          const TransactionsState());
     });
 
     test('incrementTransactionId returns 1 when id is null', () {
-      expect(TransactionsBloc(localStorage).incrementTransactionId(null), 1);
+      expect(
+          TransactionsBloc(transactionsRepository).incrementTransactionId(null),
+          1);
     });
 
     test('incrementTransactionId increments last id by 1', () {
       const lastId = 41;
       expect(
-        TransactionsBloc(localStorage).incrementTransactionId(lastId),
+        TransactionsBloc(transactionsRepository).incrementTransactionId(lastId),
         lastId + 1,
       );
     });
@@ -65,7 +69,7 @@ void main() {
       () {
         final now = DateTime.now();
         expect(
-          TransactionsBloc(localStorage).setDateWithoutTime(),
+          TransactionsBloc(transactionsRepository).setDateWithoutTime(),
           DateTime(now.year, now.month, now.day),
         );
       },
@@ -75,11 +79,12 @@ void main() {
       blocTest<TransactionsBloc, TransactionsState>(
         'emits successful status when TransactionsFetched is added.',
         setUp: () {
-          when(() => localStorage.getTransactions()).thenAnswer((_) async {
+          when(() => transactionsRepository.getTransactions())
+              .thenAnswer((_) async {
             return mockTransactions;
           });
         },
-        build: () => TransactionsBloc(localStorage),
+        build: () => TransactionsBloc(transactionsRepository),
         act: (bloc) => bloc.add(TransactionsFetched()),
         expect: () => <TransactionsState>[
           TransactionsState(
@@ -88,24 +93,25 @@ void main() {
           )
         ],
         verify: (_) {
-          verify(() => localStorage.getTransactions()).called(1);
+          verify(() => transactionsRepository.getTransactions()).called(1);
         },
       );
 
       blocTest<TransactionsBloc, TransactionsState>(
         'emits failure status when TransactionsFetched and throw exception',
         setUp: () {
-          when(() => localStorage.getTransactions()).thenAnswer((_) async {
+          when(() => transactionsRepository.getTransactions())
+              .thenAnswer((_) async {
             throw Exception();
           });
         },
-        build: () => TransactionsBloc(localStorage),
+        build: () => TransactionsBloc(transactionsRepository),
         act: (bloc) => bloc.add(TransactionsFetched()),
         expect: () => <TransactionsState>[
           const TransactionsState(status: TransactionsStatus.failure)
         ],
         verify: (_) {
-          verify(() => localStorage.getTransactions()).called(1);
+          verify(() => transactionsRepository.getTransactions()).called(1);
         },
       );
     });
@@ -133,10 +139,10 @@ void main() {
         'emits success when TransactionAdded adds a new transaction',
         setUp: () {
           when(
-            () => localStorage.addTransaction(any<Transaction>()),
+            () => transactionsRepository.addTransaction(any<Transaction>()),
           ).thenAnswer((_) => Future<void>.value());
         },
-        build: () => TransactionsBloc(localStorage),
+        build: () => TransactionsBloc(transactionsRepository),
         act: (bloc) => bloc.add(const TransactionAdded(mockNewTransaction)),
         expect: () => <TransactionsState>[
           TransactionsState(
@@ -146,7 +152,7 @@ void main() {
         ],
         verify: (_) {
           verify(
-            () => localStorage.addTransaction(any<Transaction>()),
+            () => transactionsRepository.addTransaction(any<Transaction>()),
           ).called(1);
         },
       );
@@ -156,10 +162,10 @@ void main() {
         "transactions aren't empty",
         setUp: () {
           when(
-            () => localStorage.addTransaction(any<Transaction>()),
+            () => transactionsRepository.addTransaction(any<Transaction>()),
           ).thenAnswer((_) => Future<void>.value());
         },
-        build: () => TransactionsBloc(localStorage),
+        build: () => TransactionsBloc(transactionsRepository),
         seed: () => TransactionsState(
           status: TransactionsStatus.success,
           transactions: mockTransactions,
@@ -175,7 +181,7 @@ void main() {
         ],
         verify: (_) {
           verify(
-            () => localStorage.addTransaction(any<Transaction>()),
+            () => transactionsRepository.addTransaction(any<Transaction>()),
           ).called(1);
         },
       );
@@ -184,17 +190,17 @@ void main() {
         'emits failure when TransactionAdded throws an exception',
         setUp: () {
           when(
-            () => localStorage.addTransaction(any<Transaction>()),
+            () => transactionsRepository.addTransaction(any<Transaction>()),
           ).thenAnswer((_) => throw Exception());
         },
-        build: () => TransactionsBloc(localStorage),
+        build: () => TransactionsBloc(transactionsRepository),
         act: (bloc) => bloc.add(const TransactionAdded(mockNewTransaction)),
         expect: () => <TransactionsState>[
           const TransactionsState(status: TransactionsStatus.failure),
         ],
         verify: (_) {
           verify(
-            () => localStorage.addTransaction(any<Transaction>()),
+            () => transactionsRepository.addTransaction(any<Transaction>()),
           ).called(1);
         },
       );
@@ -216,7 +222,7 @@ void main() {
 
       blocTest<TransactionsBloc, TransactionsState>(
         'emits success when TransactionsSearched finds matching',
-        build: () => TransactionsBloc(localStorage),
+        build: () => TransactionsBloc(transactionsRepository),
         seed: () => TransactionsState(
           status: TransactionsStatus.success,
           transactions: [...mockTransactions, ...extraTransactions],
@@ -234,7 +240,7 @@ void main() {
 
       blocTest<TransactionsBloc, TransactionsState>(
         'emits success when TransactionsSearched finds no matching',
-        build: () => TransactionsBloc(localStorage),
+        build: () => TransactionsBloc(transactionsRepository),
         seed: () => TransactionsState(
           status: TransactionsStatus.success,
           transactions: [...mockTransactions, ...extraTransactions],
@@ -254,7 +260,7 @@ void main() {
 
       blocTest<TransactionsBloc, TransactionsState>(
         'emits success when TransactionsSearched finds multiple matching',
-        build: () => TransactionsBloc(localStorage),
+        build: () => TransactionsBloc(transactionsRepository),
         seed: () => TransactionsState(
           status: TransactionsStatus.success,
           transactions: [
