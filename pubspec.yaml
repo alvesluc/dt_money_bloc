@@ -17,7 +17,7 @@ dependencies:
   flutter_bloc: ^8.1.1
   flutter_localizations:
     sdk: flutter
-  intl: ^0.17.0 # flutter gen-l10n
+  intl: ^0.18.0 # flutter gen-l10n
   phosphor_flutter: ^1.4.0
   shared_preferences: ^2.0.17
   stream_transform: ^2.1.0
